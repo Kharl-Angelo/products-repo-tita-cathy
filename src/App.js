@@ -1,8 +1,7 @@
-import "./App.css";
 import ProductForm from "./tabs/productForm";
 import { createContext, useState } from "react";
-import SelectTabs from "./selectTabs";
 import ProductDisplay from "./tabs/productDisplay";
+import { Tabs, TabsList, TabPanel, Tab } from "@mui/base";
 
 export const MyContext = createContext();
 
@@ -23,9 +22,18 @@ function App() {
           setError,
         }}
       >
-        <SelectTabs />
-        <ProductForm />
-        <ProductDisplay />
+        <Tabs defaultValue="productForm">
+          <TabsList>
+            <Tab value="productForm">Product Form</Tab>
+            <Tab value="productDisplay">Product Display</Tab>
+          </TabsList>
+          <TabPanel value="productForm">
+            <ProductForm />
+          </TabPanel>
+          <TabPanel value="productDisplay">
+            <ProductDisplay />
+          </TabPanel>
+        </Tabs>
       </MyContext.Provider>
     </>
   );
