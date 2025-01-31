@@ -1,24 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import ProductForm from "./tabs/productForm";
+import { createContext, useState } from "react";
+import SelectTabs from "./selectTabs";
+import ProductDisplay from "./tabs/productDisplay";
+
+export const MyContext = createContext();
 
 function App() {
+  const [products, setProducts] = useState(() => {
+    const savedProducts = localStorage.getItem("products");
+    return savedProducts ? JSON.parse(savedProducts) : [];
+  });
+  const [error, setError] = useState("");
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <MyContext.Provider
+        value={{
+          products,
+          setProducts,
+          error,
+          setError,
+        }}
+      >
+        <SelectTabs />
+        <ProductForm />
+        <ProductDisplay />
+      </MyContext.Provider>
+    </>
   );
 }
 
