@@ -32,15 +32,26 @@ const ProductForm = () => {
     >
       <Stack
         sx={{
-          border: "1px solid black",
-          borderRadius: "10px",
-          padding: "0.5rem",
+          backgroundColor: "rgba(198, 190, 218, 0.6)",
+          border: "2px solid #DAE2ED",
+          borderRadius: "12px",
+          padding: "0 2rem",
         }}
       >
-        <Typography>Enter Products Info</Typography>
+        <Typography
+          textAlign="center"
+          variant="overline"
+          fontWeight="700"
+          fontSize="
+          1em"
+          lineHeight="normal"
+          marginTop="0.8rem"
+        >
+          Enter Products Info
+        </Typography>
         <TextField
+          color="primary"
           required
-          id="outlined-error"
           label="Product ID"
           size="small"
           sx={{

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext, useState } from "react";
 import { MyContext } from "../App";
 import {
   TableContainer,
@@ -13,13 +13,9 @@ import {
 } from "@mui/material";
 
 const ProductDisplay = () => {
-  const { products, setProducts } = useContext(MyContext);
+  const { products, setProducts, error, setError } = useContext(MyContext);
   const [isUpdating, setIsUpdating] = useState(null);
-  const [newUpdatedValue, setNewUpdatedValue] = useState({});
-
-  const refNewProductID = useRef("");
-  const refNewProductName = useRef("");
-  const refNewProductPrice = useRef("");
+  const [updatedProduct, setUpdatedProduct] = useState({});
 
   const tableTitles = [
     "Product ID",
@@ -33,15 +29,59 @@ const ProductDisplay = () => {
   };
 
   const handleUpdateProduct = (index) => {
-    setIsUpdating(index === isUpdating ? null : index);
+    setIsUpdating(index);
+    setUpdatedProduct(products[index]);
   };
 
   const handleConfirmUpdate = (index) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((prevProduct, i) =>
-        index === i ? console.log("true") : console.log("not true")
+    const updatedProducts = [...products];
+    updatedProducts[index] = updatedProduct;
+
+    let newErrors = {
+      ProductID: updatedProduct.ProductID ? "" : "This is required!",
+      ProductName: updatedProduct.ProductName ? "" : "This is required!",
+      ProductPrice: updatedProduct.ProductPrice ? "" : "This is required!",
+    };
+
+    const exceptCurrProdID = updatedProducts.filter((_, i) => i !== index);
+
+    console.log(exceptCurrProdID);
+
+    if (
+      exceptCurrProdID.some(
+        (exceptCurrProdId) =>
+          exceptCurrProdId.ProductID === updatedProduct.ProductID
       )
-    );
+    ) {
+      newErrors.ProductID = "Product ID has already been used.";
+    }
+
+    if (isNaN(updatedProduct.ProductPrice)) {
+      newErrors.ProductPrice = "Enter a proper price";
+    }
+
+    if (
+      newErrors.ProductID ||
+      newErrors.ProductName ||
+      newErrors.ProductPrice
+    ) {
+      setError(newErrors);
+      return;
+    }
+
+    setProducts(updatedProducts);
+
+    setIsUpdating(null);
+    setUpdatedProduct({});
+
+    setError({});
+  };
+
+  const handleInputChange = (e, field) => {
+    setUpdatedProduct({
+      ...updatedProduct,
+      [field]: e.target.value,
+    });
   };
 
   return (
@@ -60,8 +100,13 @@ const ProductDisplay = () => {
               <TableCell>
                 {isUpdating === index ? (
                   <TextField
-                    defaultValue={product.ProductID}
-                    inputRef={refNewProductID}
+                    required
+                    label="Product ID"
+                    size="small"
+                    error={!!error.ProductID}
+                    helperText={error.ProductID}
+                    value={updatedProduct.ProductID || ""}
+                    onChange={(e) => handleInputChange(e, "ProductID")}
                     variant="standard"
                   />
                 ) : (
@@ -71,8 +116,13 @@ const ProductDisplay = () => {
               <TableCell>
                 {isUpdating === index ? (
                   <TextField
-                    defaultValue={product.ProductName}
-                    inputRef={refNewProductName}
+                    required
+                    label="Product Name"
+                    size="small"
+                    error={!!error.ProductName}
+                    helperText={error.ProductName}
+                    value={updatedProduct.ProductName || ""}
+                    onChange={(e) => handleInputChange(e, "ProductName")}
                     variant="standard"
                   />
                 ) : (
@@ -82,8 +132,13 @@ const ProductDisplay = () => {
               <TableCell>
                 {isUpdating === index ? (
                   <TextField
-                    defaultValue={product.ProductPrice}
-                    inputRef={refNewProductPrice}
+                    required
+                    label="Product Price"
+                    size="small"
+                    error={!!error.ProductPrice}
+                    helperText={error.ProductPrice}
+                    value={updatedProduct.ProductPrice || ""}
+                    onChange={(e) => handleInputChange(e, "ProductPrice")}
                     variant="standard"
                   />
                 ) : (

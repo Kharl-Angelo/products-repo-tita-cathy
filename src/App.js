@@ -1,8 +1,13 @@
 import ProductForm from "./tabs/productForm";
 import { createContext, useState } from "react";
 import ProductDisplay from "./tabs/productDisplay";
-import { Tabs, TabsList, TabPanel, Tab } from "@mui/base";
-
+import { Tabs } from "@mui/base";
+import {
+  Tab,
+  TabsList,
+  TabPanelForm,
+  TabPanelDisplay,
+} from "./styles/themes/customizedStyles";
 export const MyContext = createContext();
 
 function App() {
@@ -27,12 +32,21 @@ function App() {
             <Tab value="productForm">Product Form</Tab>
             <Tab value="productDisplay">Product Display</Tab>
           </TabsList>
-          <TabPanel value="productForm">
+          <TabPanelForm
+            sx={{
+              "& .MuiBox-root": {
+                height: "fit-content",
+                width: "100%",
+                paddingTop: "3rem",
+              },
+            }}
+            value="productForm"
+          >
             <ProductForm />
-          </TabPanel>
-          <TabPanel value="productDisplay">
+          </TabPanelForm>
+          <TabPanelDisplay value="productDisplay">
             <ProductDisplay />
-          </TabPanel>
+          </TabPanelDisplay>
         </Tabs>
       </MyContext.Provider>
     </>

@@ -1,3 +1,11 @@
 body {
   margin: 0;
+  background: rgb(24, 18, 43);
+  background: linear-gradient(
+    180deg,
+    rgba(24, 18, 43, 1) 0%,
+    rgba(68, 60, 104, 1) 80%,
+    rgba(99, 89, 133, 1) 100%
+  );
+  min-height: 100vh;
 }
